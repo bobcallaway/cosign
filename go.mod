@@ -17,10 +17,9 @@ require (
 	github.com/jedisct1/go-minisign v0.0.0-20210703085342-c1f07ee84431 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/manifoldco/promptui v0.8.0
-	github.com/open-policy-agent/opa v0.30.1
+	github.com/open-policy-agent/opa v0.31.0
 	github.com/peterbourgon/ff/v3 v3.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/common v0.29.0 // indirect
 	github.com/sigstore/fulcio v0.0.0-20210705024150-f64f6358e3a8
 	github.com/sigstore/rekor v0.2.1-0.20210705133645-dbbbff597bc2
 	github.com/sigstore/sigstore v0.0.0-20210707163508-5b6fffda16e4
