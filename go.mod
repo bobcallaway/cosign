@@ -5,10 +5,9 @@ go 1.16
 require (
 	cloud.google.com/go/storage v1.16.0
 	github.com/Azure/go-autorest/autorest/adal v0.9.14 // indirect
-	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/cyberphone/json-canonicalization v0.0.0-20210810063702-dce61d6e0ff9
 	github.com/go-openapi/runtime v0.19.30
-	github.com/go-openapi/strfmt v0.20.1
+	github.com/go-openapi/strfmt v0.20.2
 	github.com/go-openapi/swag v0.19.15
 	github.com/go-piv/piv-go v1.8.0
 	github.com/google/go-cmp v0.5.6
