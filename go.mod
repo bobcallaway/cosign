@@ -3,7 +3,8 @@ module github.com/sigstore/cosign
 go 1.16
 
 require (
-	cloud.google.com/go/storage v1.16.0
+	cloud.google.com/go/kms v0.1.0 // indirect
+	cloud.google.com/go/storage v1.16.1
 	github.com/Azure/go-autorest/autorest/adal v0.9.14 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/cyberphone/json-canonicalization v0.0.0-20210810063702-dce61d6e0ff9
