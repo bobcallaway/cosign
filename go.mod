@@ -25,8 +25,8 @@ require (
 	github.com/theupdateframework/go-tuf v0.0.0-20210722233521-90e262754396
 	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
 	google.golang.org/api v0.56.0
-	k8s.io/api v0.21.4
-	k8s.io/apimachinery v0.21.4
+	k8s.io/api v0.22.2
+	k8s.io/apimachinery v0.22.2
 	k8s.io/client-go v0.21.4
 	knative.dev/pkg v0.0.0-20210908025933-71508fc69a57
 )
