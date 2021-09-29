@@ -16,7 +16,7 @@ require (
 	github.com/in-toto/in-toto-golang v0.2.1-0.20210806133539-f50646681592
 	github.com/manifoldco/promptui v0.8.0
 	github.com/open-policy-agent/opa v0.32.0
-	github.com/peterbourgon/ff/v3 v3.1.0
+	github.com/peterbourgon/ff/v3 v3.1.2
 	github.com/pkg/errors v0.9.1
 	github.com/sigstore/fulcio v0.1.2-0.20210831152525-42f7422734bb
 	github.com/sigstore/rekor v0.3.0
@@ -50,7 +50,6 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/urfave/cli v1.22.5 // indirect
 	go.opentelemetry.io/contrib v0.22.0 // indirect
-	go.opentelemetry.io/proto/otlp v0.9.0 // indirect
 	golang.org/x/mod v0.5.0 // indirect
 	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect
 	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
