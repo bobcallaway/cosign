@@ -24,7 +24,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/theupdateframework/go-tuf v0.0.0-20210722233521-90e262754396
 	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
-	google.golang.org/api v0.56.0
+	google.golang.org/api v0.58.0
 	k8s.io/api v0.21.4
 	k8s.io/apimachinery v0.21.4
 	k8s.io/client-go v0.21.4
@@ -53,7 +53,6 @@ require (
 	go.opentelemetry.io/proto/otlp v0.9.0 // indirect
 	golang.org/x/mod v0.5.0 // indirect
 	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect
-	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	k8s.io/klog/v2 v2.10.0 // indirect
