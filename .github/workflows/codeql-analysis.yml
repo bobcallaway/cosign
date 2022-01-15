@@ -24,7 +24,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: macos-latest # this is because mac runners have more cores & ram than linux ones
 
     permissions:
       security-events: write
@@ -45,10 +45,10 @@ jobs:
       with:
         # In order:
         # * Module download cache
-        # * Build cache (Linux)
+        # * Build cache (macOS)
         path: |
           ~/go/pkg/mod
-          ~/.cache/go-build
+          ~/Library/Caches/go-build
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
