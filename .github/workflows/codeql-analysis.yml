@@ -24,7 +24,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: macos-latest # this is because mac runners have more cores & ram than linux ones
+    runs-on: ubuntu-latest
 
     permissions:
       security-events: write
@@ -35,6 +35,9 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'go' ]
+        
+    env:
+      CODEQL_EXTRACTOR_GO_BUILD_TRACING: on
 
     steps:
     - name: Checkout repository
@@ -45,10 +48,10 @@ jobs:
       with:
         # In order:
         # * Module download cache
-        # * Build cache (macOS)
+        # * Build cache (Linux)
         path: |
           ~/go/pkg/mod
-          ~/Library/Caches/go-build
+          ~/.cache/go-build
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
