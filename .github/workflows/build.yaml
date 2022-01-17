@@ -45,7 +45,7 @@ jobs:
       - uses: imjasonh/setup-ko@2c3450ca27f6e6f2b02e72a40f2163c281a1f675 #v0.4
 
       - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
+        run: go install golang.org/x/tools/cmd/goimports@v0.1.8
 
       - name: Set up Cloud SDK
         uses: google-github-actions/auth@c6c22902f6af237edb96ede5f25a00e864589b2f #v0.4.4
