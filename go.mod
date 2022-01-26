@@ -3,7 +3,7 @@ module github.com/sigstore/cosign
 go 1.16
 
 require (
-	cloud.google.com/go/storage v1.18.2
+	cloud.google.com/go/storage v1.19.0
 	cuelang.org/go v0.4.1
 	github.com/ThalesIgnite/crypto11 v1.2.5
 	github.com/cyberphone/json-canonicalization v0.0.0-20210823021906-dc406ceaf94b
@@ -56,7 +56,6 @@ require (
 )
 
 require (
-	cloud.google.com/go/iam v0.1.0 // indirect
 	github.com/bytecodealliance/wasmtime-go v0.32.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
