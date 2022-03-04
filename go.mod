@@ -21,7 +21,7 @@ require (
 	github.com/in-toto/in-toto-golang v0.3.4-0.20211211042327-af1f9fb822bf
 	github.com/manifoldco/promptui v0.9.0
 	github.com/miekg/pkcs11 v1.1.1
-	github.com/open-policy-agent/opa v0.35.0
+	github.com/open-policy-agent/opa v0.38.0
 	github.com/pkg/errors v0.9.1
 	github.com/secure-systems-lab/go-securesystemslib v0.3.0
 	github.com/sigstore/fulcio v0.1.2-0.20220114150912-86a2036f9bc7
@@ -47,7 +47,6 @@ require (
 require (
 	github.com/armon/go-metrics v0.3.10
 	github.com/armon/go-radix v1.0.0
-	github.com/bytecodealliance/wasmtime-go v0.33.1 // indirect
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/golang/snappy v0.0.4
 	github.com/google/go-containerregistry/pkg/authn/k8schain v0.0.0-20220219142810-1571d7fdc46e
@@ -69,12 +68,10 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1
 	github.com/mitchellh/mapstructure v1.4.3
 	github.com/pierrec/lz4 v2.6.1+incompatible
-	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/spf13/afero v1.8.0 // indirect
 	github.com/urfave/cli v1.22.5 // indirect
 	github.com/withfig/autocomplete-tools/packages/cobra v0.0.0-20220122124547-31d3821a6898
 	go.opentelemetry.io/contrib v1.3.0 // indirect
-	go.opentelemetry.io/proto/otlp v0.12.0 // indirect
 	go.uber.org/atomic v1.9.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220213190939-1e6e3497d506
