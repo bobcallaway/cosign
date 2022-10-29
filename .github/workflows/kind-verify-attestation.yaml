@@ -54,7 +54,7 @@ jobs:
     - uses: imjasonh/setup-ko@ace48d793556083a76f1e3e6068850c1f4a369aa
 
     - name: Install yq
-      uses: mikefarah/yq@1f0881fb5faf371694bfa108753cda0b824f5037 # v4.27.5
+      uses: mikefarah/yq@0cc5e75432c8c717bac0b8e790b28b3753669638 # v4.27.5
 
     - name: build cosign
       run: |
