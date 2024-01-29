@@ -61,7 +61,7 @@ jobs:
           ./${{matrix.COSIGN_TARGET}} verify-blob --key ./.github/workflows/cosign-test.pub --signature ${{matrix.COSIGN_TARGET}}.sig ./${{matrix.COSIGN_TARGET}}
       - name: Upload artifacts
         if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: artifacts
           path: |
