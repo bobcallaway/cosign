@@ -30,7 +30,7 @@ import (
 
 	"errors"
 
-	"github.com/in-toto/in-toto-golang/in_toto"
+	attestationv1 "github.com/in-toto/attestation/go/v1"
 	ssldsse "github.com/secure-systems-lab/go-securesystemslib/dsse"
 	"github.com/secure-systems-lab/go-securesystemslib/encrypted"
 	"github.com/sigstore/cosign/v2/cmd/cosign/cli/generate"
@@ -249,18 +249,19 @@ func TestAttestBlob(t *testing.T) {
 			if err != nil {
 				t.Fatalf("decoding dsse payload: %v", err)
 			}
-			var statement in_toto.Statement
+			var statement attestationv1.Statement
 			if err := json.Unmarshal(decodedPredicate, &statement); err != nil {
-				t.Fatalf("decoding predicate: %v", err)
+				t.Fatalf("decoding statement: %v", err)
 			}
 			if statement.Subject == nil || len(statement.Subject) != 1 {
-				t.Fatalf("expected one subject in intoto statement")
+				t.Fatalf("expected one subject in statement")
 			}
 			if statement.Subject[0].Digest["sha256"] != blobDigest {
-				t.Fatalf("expected matching digest")
+				t.Fatalf("expected matching digest, got %s, want %s", statement.Subject[0].Digest["sha256"], blobDigest)
 			}
-			if statement.PredicateType != options.PredicateTypeMap[predicateType] {
-				t.Fatalf("expected matching predicate type")
+			expectedPredicateType := options.PredicateTypeMap[predicateType]
+			if statement.PredicateType != expectedPredicateType {
+				t.Fatalf("expected matching predicate type. got: %s, want: %s", statement.PredicateType, expectedPredicateType)
 			}
 
 			// Load a verifier and DSSE verify

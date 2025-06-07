@@ -24,7 +24,6 @@ import (
 
 	"github.com/in-toto/in-toto-golang/in_toto"
 	"github.com/sigstore/cosign/v2/cmd/cosign/cli/options"
-	"github.com/sigstore/cosign/v2/pkg/cosign/attestation"
 	"github.com/sigstore/cosign/v2/pkg/oci"
 )
 
@@ -143,13 +142,15 @@ func AttestationToPayloadJSON(_ context.Context, predicateType string, verifiedA
 			return nil, statement.PredicateType, fmt.Errorf("marshaling CycloneDXStatement: %w", err)
 		}
 	case options.PredicateVuln:
-		var vulnStatement attestation.CosignVulnStatement
-		if err := json.Unmarshal(decodedPayload, &vulnStatement); err != nil {
-			return nil, statement.PredicateType, fmt.Errorf("unmarshaling CosignVulnStatement: %w", err)
+		// The 'statement' variable already holds the unmarshaled DSSE envelope's payload.
+		// The actual predicate (CosignVulnPredicate) is within statement.Predicate.
+		// We need to marshal this inner predicate for the policy engine.
+		if statement.Predicate == nil {
+			return nil, statement.PredicateType, fmt.Errorf("vulnerability predicate is nil in statement")
 		}
-		payload, err = json.Marshal(vulnStatement)
+		payload, err = json.Marshal(statement.Predicate)
 		if err != nil {
-			return nil, statement.PredicateType, fmt.Errorf("marshaling CosignVulnStatement: %w", err)
+			return nil, statement.PredicateType, fmt.Errorf("marshaling vulnerability predicate from statement: %w", err)
 		}
 	default:
 		// Valid URI type reaches here.

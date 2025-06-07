@@ -155,12 +155,13 @@ func TestAttestationToPayloadJson(t *testing.T) {
 			checkPredicateType(t, attestation.CosignCustomProvenanceV01, intoto.PredicateType)
 			checkPredicateType(t, gotPredicateType, intoto.PredicateType)
 		case "vuln":
-			var vulnStatement attestation.CosignVulnStatement
-			if err := json.Unmarshal(jsonBytes, &vulnStatement); err != nil {
-				t.Fatalf("[%s] Wanted vuln statement, can't unmarshal to it: %v", fileName, err)
+			// jsonBytes is now the CosignVulnPredicate itself.
+			var vulnPredicate attestation.CosignVulnPredicate
+			if err := json.Unmarshal(jsonBytes, &vulnPredicate); err != nil {
+				t.Fatalf("[%s] Wanted vuln predicate, can't unmarshal to it: %v", fileName, err)
 			}
-			checkPredicateType(t, attestation.CosignVulnProvenanceV01, vulnStatement.PredicateType)
-			checkPredicateType(t, gotPredicateType, vulnStatement.PredicateType)
+			// gotPredicateType is from the outer statement's header, which should match CosignVulnProvenanceV01
+			checkPredicateType(t, attestation.CosignVulnProvenanceV01, gotPredicateType)
 		case "default":
 			t.Fatal("non supported predicate file")
 		}
