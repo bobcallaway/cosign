@@ -19,18 +19,33 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"reflect"
-	"strings"
 	"time"
 
+	link "github.com/in-toto/attestation/go/predicates/link/v0"
+	slsav02 "github.com/in-toto/attestation/go/predicates/provenance/v02"
+	slsav1 "github.com/in-toto/attestation/go/predicates/provenance/v1"
 	attestationv1 "github.com/in-toto/attestation/go/v1"
-	intoto "github.com/in-toto/in-toto-golang/in_toto"
-	slsav02 "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v0.2"
-	slsav1 "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v1"
+
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
 const (
+	// CycloneDX SBOM URI
+	CycloneDXURI = "https://cyclonedx.org/bom"
+
+	// In-Toto Link v0 URI
+	LinkV1URI = "https://in-toto.io/Link/v1"
+
+	// SLSA v0.2 URI
+	SLSAProvenanceV02 = "https://slsa.dev/provenance/v0.2"
+
+	// SLSA v1 URI
+	SLSAProvenanceV1 = "https://slsa.dev/provenance/v1"
+
+	// SPDX Document URI
+	SPDXDocumentURI = "https://spdx.dev/Document"
+
 	// CosignCustomProvenanceV01 specifies the type of the Predicate.
 	CosignCustomProvenanceV01 = "https://cosign.sigstore.dev/attestation/v1"
 
@@ -56,15 +71,6 @@ type CosignVulnPredicate struct {
 	Scanner    Scanner    `json:"scanner"`
 	Metadata   Metadata   `json:"metadata"`
 }
-
-// I think this will be moving to upstream in-toto in the fullness of time
-// but creating it here for now so that we have a way to deserialize it
-// as a InToto Statement
-// https://github.com/in-toto/attestation/issues/58
-/* type CosignVulnStatement struct {
-	in_toto.StatementHeader
-	Predicate CosignVulnPredicate `json:"predicate"`
-} */
 
 type Invocation struct {
 	Parameters interface{} `json:"parameters"`
@@ -227,23 +233,19 @@ func generateCustomPredicate(rawPayload []byte, customType, timestamp string) (i
 }
 
 func generateSLSAProvenanceStatementSLSA02(rawPayload []byte, digest string, repo string) (*attestationv1.Statement, error) {
-	stmt := generateStatementHeader(digest, repo, slsav02.PredicateSLSAProvenance)
-	var predicate slsav02.ProvenancePredicate
-	err := checkRequiredJSONFields(rawPayload, reflect.TypeOf(predicate))
-	if err != nil {
-		return nil, fmt.Errorf("checking required JSON fields for SLSA v0.2 provenance predicate: %w", err)
-	}
+	stmt := generateStatementHeader(digest, repo, SLSAProvenanceV02)
+	var predicate slsav02.Provenance
 	if err := json.Unmarshal(rawPayload, &predicate); err != nil {
 		return nil, fmt.Errorf("unmarshaling SLSA v0.2 provenance predicate: %w", err)
 	}
 
-	predicateBytes, err := json.Marshal(predicate)
+	predicateBytes, err := protojson.Marshal(&predicate)
 	if err != nil {
 		return nil, fmt.Errorf("marshaling SLSA v0.2 predicate to JSON: %w", err)
 	}
 
 	var predicateStruct structpb.Struct
-	if err := json.Unmarshal(predicateBytes, &predicateStruct); err != nil {
+	if err := protojson.Unmarshal(predicateBytes, &predicateStruct); err != nil {
 		return nil, fmt.Errorf("unmarshaling SLSA v0.2 predicate JSON to Struct: %w", err)
 	}
 	stmt.Predicate = &predicateStruct
@@ -251,23 +253,19 @@ func generateSLSAProvenanceStatementSLSA02(rawPayload []byte, digest string, rep
 }
 
 func generateSLSAProvenanceStatementSLSA1(rawPayload []byte, digest string, repo string) (*attestationv1.Statement, error) {
-	stmt := generateStatementHeader(digest, repo, slsav1.PredicateSLSAProvenance)
-	var predicate slsav1.ProvenancePredicate
-	err := checkRequiredJSONFields(rawPayload, reflect.TypeOf(predicate))
-	if err != nil {
-		return nil, fmt.Errorf("checking required JSON fields for SLSA v1 provenance predicate: %w", err)
-	}
+	stmt := generateStatementHeader(digest, repo, SLSAProvenanceV1)
+	var predicate slsav1.Provenance
 	if err := json.Unmarshal(rawPayload, &predicate); err != nil {
 		return nil, fmt.Errorf("unmarshaling SLSA v1 provenance predicate: %w", err)
 	}
 
-	predicateBytes, err := json.Marshal(predicate)
+	predicateBytes, err := protojson.Marshal(&predicate)
 	if err != nil {
 		return nil, fmt.Errorf("marshaling SLSA v1 predicate to JSON: %w", err)
 	}
 
 	var predicateStruct structpb.Struct
-	if err := json.Unmarshal(predicateBytes, &predicateStruct); err != nil {
+	if err := protojson.Unmarshal(predicateBytes, &predicateStruct); err != nil {
 		return nil, fmt.Errorf("unmarshaling SLSA v1 predicate JSON to Struct: %w", err)
 	}
 	stmt.Predicate = &predicateStruct
@@ -275,23 +273,19 @@ func generateSLSAProvenanceStatementSLSA1(rawPayload []byte, digest string, repo
 }
 
 func generateLinkStatement(rawPayload []byte, digest string, repo string) (*attestationv1.Statement, error) {
-	stmt := generateStatementHeader(digest, repo, intoto.PredicateLinkV1)
-	var linkRef intoto.Link
-	err := checkRequiredJSONFields(rawPayload, reflect.TypeOf(linkRef))
-	if err != nil {
-		return nil, fmt.Errorf("checking required JSON fields for link predicate: %w", err)
-	}
+	stmt := generateStatementHeader(digest, repo, LinkV1URI)
+	var linkRef link.Link
 	if err := json.Unmarshal(rawPayload, &linkRef); err != nil {
 		return nil, fmt.Errorf("unmarshaling link predicate: %w", err)
 	}
 
-	predicateBytes, err := json.Marshal(linkRef)
+	predicateBytes, err := protojson.Marshal(&linkRef)
 	if err != nil {
 		return nil, fmt.Errorf("marshaling link predicate to JSON: %w", err)
 	}
 
 	var predicateStruct structpb.Struct
-	if err := json.Unmarshal(predicateBytes, &predicateStruct); err != nil {
+	if err := protojson.Unmarshal(predicateBytes, &predicateStruct); err != nil {
 		return nil, fmt.Errorf("unmarshaling link predicate JSON to Struct: %w", err)
 	}
 	stmt.Predicate = &predicateStruct
@@ -319,7 +313,7 @@ func generateOpenVexStatement(rawPayload []byte, digest string, repo string) (*a
 }
 
 func generateSPDXStatement(rawPayload []byte, digest string, repo string, parseJSON bool) (*attestationv1.Statement, error) {
-	stmt := generateStatementHeader(digest, repo, intoto.PredicateSPDX)
+	stmt := generateStatementHeader(digest, repo, SPDXDocumentURI)
 	var data interface{}
 	if parseJSON {
 		if err := json.Unmarshal(rawPayload, &data); err != nil {
@@ -343,7 +337,7 @@ func generateSPDXStatement(rawPayload []byte, digest string, repo string, parseJ
 }
 
 func generateCycloneDXStatement(rawPayload []byte, digest string, repo string) (*attestationv1.Statement, error) {
-	stmt := generateStatementHeader(digest, repo, intoto.PredicateCycloneDX)
+	stmt := generateStatementHeader(digest, repo, CycloneDXURI)
 	var data interface{}
 	if err := json.Unmarshal(rawPayload, &data); err != nil {
 		return nil, fmt.Errorf("unmarshaling CycloneDX predicate: %w", err)
@@ -360,28 +354,4 @@ func generateCycloneDXStatement(rawPayload []byte, digest string, repo string) (
 	}
 	stmt.Predicate = &predicateStruct
 	return stmt, nil
-}
-
-func checkRequiredJSONFields(rawPayload []byte, typ reflect.Type) error {
-	var tmp map[string]interface{}
-	if err := json.Unmarshal(rawPayload, &tmp); err != nil {
-		return err
-	}
-	// Create list of json tags, e.g. `json:"_type"`
-	attributeCount := typ.NumField()
-	allFields := make([]string, 0)
-	for i := 0; i < attributeCount; i++ {
-		jsonTagFields := strings.SplitN(typ.Field(i).Tag.Get("json"), ",", 2)
-		if len(jsonTagFields) < 2 {
-			allFields = append(allFields, jsonTagFields[0])
-		}
-	}
-
-	// Assert that there's a key in the passed map for each tag
-	for _, field := range allFields {
-		if _, ok := tmp[field]; !ok {
-			return fmt.Errorf("required field %s missing", field)
-		}
-	}
-	return nil
 }
